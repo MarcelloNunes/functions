@@ -1,7 +1,7 @@
-import { AsaasService } from "../services/asaasService";
-import { PsicologoRepository } from "../repositories/psicologoRepository";
-import { Psicologo } from "../entities/psicologo";
-import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import {AsaasService} from "../services/asaasService";
+import {PsicologoRepository} from "../repositories/psicologoRepository";
+import {Psicologo} from "../entities/psicologo";
+import {onDocumentCreated} from "firebase-functions/v2/firestore";
 
 const asaasService = new AsaasService();
 const psicologoRepository = new PsicologoRepository();

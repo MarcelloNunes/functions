@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { AsaasService } from "../services/asaasService";
+import {Request, Response} from "express";
+import {AsaasService} from "../services/asaasService";
 
 const asaasService = new AsaasService();
 
