@@ -3,14 +3,23 @@ import {PsicologoRepository} from "../repositories/psicologoRepository";
 import {Psicologo} from "../entities/psicologo";
 import {onDocumentCreated} from "firebase-functions/v2/firestore";
 
+
 const asaasService = new AsaasService();
 const psicologoRepository = new PsicologoRepository();
 
 export const onClientCreate = onDocumentCreated(
-  "psychologists/{clientId}",
+  
+  {
+    document: "psychologists/{clientId}",
+    region: "southamerica-east1",
+  },
   async (event) => {
     const data = event.data?.data() as Psicologo;
     const clientId = event.params.clientId;
+
+
+    data.cpfCnpj = "229.032.960-65";// remover depois dos testes
+
 
     console.log("🔥 Trigger disparado", clientId);
 
@@ -36,7 +45,6 @@ export const onClientCreate = onDocumentCreated(
       }
 
 
-
       console.log("📤 Enviando para Asaas:", data);
 
       const created = await asaasService.createCustomer(data);
@@ -46,11 +54,10 @@ export const onClientCreate = onDocumentCreated(
       await psicologoRepository.updateAsaasId(clientId, created.id);
 
       console.log("💾 ID salvo no Firestore");
-
     } catch (error: any) {
       console.error("🔥 ERRO NO ASAAS:", {
         message: error.message,
-        response: error.response?.data
+        response: error.response?.data,
       });
     }
   }

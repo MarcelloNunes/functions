@@ -16,7 +16,7 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 
 setGlobalOptions({
-  region: "us-central1",
+  region: "southamerica-east1",
   maxInstances: 10,
 });
 
@@ -26,7 +26,10 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 
-export const api = onRequest(app);
+export const api = onRequest(
+  { region: "southamerica-east1" },
+  app
+);
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
