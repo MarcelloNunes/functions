@@ -30,6 +30,6 @@ module.exports = {
     "import/no-unresolved": 0,
     "indent": ["error", 2],
     "require-jsdoc": "off",
-    "new-cap": "off"
+    "new-cap": "off",
   },
 };
