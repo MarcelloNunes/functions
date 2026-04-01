@@ -11,7 +11,10 @@ import {setGlobalOptions} from "firebase-functions";
 import * as functions from "firebase-functions";
 import express from "express";
 import routes from "./routes/index";
+import * as admin from "firebase-admin";
+admin.initializeApp();
 
+export { onClientCreate } from "./triggers/PsicologoTrigger";
 const app = express();
 app.use(express.json());
 app.use(routes);
