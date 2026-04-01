@@ -7,21 +7,26 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {setGlobalOptions} from "firebase-functions";
-import * as functions from "firebase-functions";
+import {setGlobalOptions} from "firebase-functions/v2";
+import {onRequest} from "firebase-functions/v2/https";
 import express from "express";
 import routes from "./routes/index";
 import * as admin from "firebase-admin";
+
 admin.initializeApp();
 
-export { onClientCreate } from "./triggers/PsicologoTrigger";
+setGlobalOptions({
+  region: "us-central1",
+  maxInstances: 10,
+});
+
+export {onClientCreate} from "./triggers/PsicologoTrigger";
+
 const app = express();
 app.use(express.json());
 app.use(routes);
 
-export const api = functions.https.onRequest(app);
-
-
+export const api = onRequest(app);
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
@@ -35,7 +40,6 @@ export const api = functions.https.onRequest(app);
 // functions should each use functions.runWith({ maxInstances: 10 }) instead.
 // In the v1 API, each function can only serve one request per container, so
 // this will be the maximum concurrent request count.
-setGlobalOptions({maxInstances: 10});
 
 // export const helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});

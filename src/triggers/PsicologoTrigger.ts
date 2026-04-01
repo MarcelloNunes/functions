@@ -12,20 +12,46 @@ export const onClientCreate = onDocumentCreated(
     const data = event.data?.data() as Psicologo;
     const clientId = event.params.clientId;
 
-    // 1. evita duplicação
-    if (!data || data.asaasCustomerId) return;
+    console.log("🔥 Trigger disparado", clientId);
 
-    // 2. verifica no Asaas
-    const existing = await asaasService.findCustomerByCpf(data.cpfCnpj);
+    try {
+      if (!data || data.asaasCustomerId) return;
 
-    if (existing) {
-      await psicologoRepository.updateAsaasId(clientId, existing.id);
-      return;
+      console.log("📥 Dados recebidos:", data);
+
+      // 1. validação básica
+      if (!data.cpfCnpj || !data.nome || !data.email) {
+        console.error("❌ Dados obrigatórios faltando", data);
+        return;
+      }
+
+      // 2. verifica no Asaas
+      const existing = await asaasService.findCustomerByCpf(data.cpfCnpj);
+
+      if (existing) {
+        console.log("⚠️ Cliente já existe no Asaas", existing.id);
+
+        await psicologoRepository.updateAsaasId(clientId, existing.id);
+        return;
+      }
+
+
+
+      console.log("📤 Enviando para Asaas:", data);
+
+      const created = await asaasService.createCustomer(data);
+
+      console.log("✅ Criado no Asaas:", created);
+
+      await psicologoRepository.updateAsaasId(clientId, created.id);
+
+      console.log("💾 ID salvo no Firestore");
+
+    } catch (error: any) {
+      console.error("🔥 ERRO NO ASAAS:", {
+        message: error.message,
+        response: error.response?.data
+      });
     }
-
-    // 3. cria cliente
-    const created = await asaasService.createCustomer(data);
-
-    await psicologoRepository.updateAsaasId(clientId, created.id);
   }
 );
