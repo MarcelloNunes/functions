@@ -1,7 +1,7 @@
 export class Psicologo {
   id: string;
   asaasCustomerId?: string;
-  nome: string;
+  name: string;
   email: string;
   cpfCnpj: string;
   telefone: string;
@@ -12,7 +12,7 @@ export class Psicologo {
   constructor(
     id: string,
     asaasCustomerId: string | undefined,
-    nome: string,
+    name: string,
     email: string,
     cpfCnpj: string,
     telefone: string,
@@ -23,7 +23,7 @@ export class Psicologo {
   ) {
     this.id = id;
     this.asaasCustomerId = asaasCustomerId;
-    this.nome = nome;
+    this.name = name;
     this.email = email;
     this.cpfCnpj = cpfCnpj;
     this.telefone = telefone;

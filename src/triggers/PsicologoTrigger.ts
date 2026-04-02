@@ -8,7 +8,7 @@ const asaasService = new AsaasService();
 const psicologoRepository = new PsicologoRepository();
 
 export const onClientCreate = onDocumentCreated(
-  
+
   {
     document: "psychologists/{clientId}",
     region: "southamerica-east1",
@@ -16,26 +16,30 @@ export const onClientCreate = onDocumentCreated(
   async (event) => {
     const data = event.data?.data() as Psicologo;
     const clientId = event.params.clientId;
-
-
-    data.cpfCnpj = "229.032.960-65";// remover depois dos testes
-
-
     console.log("🔥 Trigger disparado", clientId);
+
 
     try {
       if (!data || data.asaasCustomerId) return;
 
       console.log("📥 Dados recebidos:", data);
 
+      const cpfCnpj = data.cpfCnpj?.replace(/\D/g, "");
+      const payload = {
+        nome: data.name,
+        email: data.email,
+        telefone: data.telefone,
+        cpfCnpj,
+      };
+
       // 1. validação básica
-      if (!data.cpfCnpj || !data.nome || !data.email) {
+      if (!payload.cpfCnpj || !payload.nome || !payload.email) {
         console.error("❌ Dados obrigatórios faltando", data);
         return;
       }
 
       // 2. verifica no Asaas
-      const existing = await asaasService.findCustomerByCpf(data.cpfCnpj);
+      const existing = await asaasService.findCustomerByCpf(payload.cpfCnpj);
 
       if (existing) {
         console.log("⚠️ Cliente já existe no Asaas", existing.id);
@@ -45,9 +49,9 @@ export const onClientCreate = onDocumentCreated(
       }
 
 
-      console.log("📤 Enviando para Asaas:", data);
+      console.log("📤 Enviando para Asaas:", payload);
 
-      const created = await asaasService.createCustomer(data);
+      const created = await asaasService.createCustomer(payload);
 
       console.log("✅ Criado no Asaas:", created);
 

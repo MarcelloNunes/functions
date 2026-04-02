@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(routes);
 
 export const api = onRequest(
-  { region: "southamerica-east1" },
+  {region: "southamerica-east1"},
   app
 );
 // Start writing functions
