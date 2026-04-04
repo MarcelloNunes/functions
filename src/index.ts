@@ -12,15 +12,30 @@ import {onRequest} from "firebase-functions/v2/https";
 import express from "express";
 import routes from "./routes/index";
 import * as admin from "firebase-admin";
+import { runDailyBilling } from "./controllers/asaasController";
+import { onSchedule } from "firebase-functions/v2/scheduler";
 
 admin.initializeApp();
+
+export const db = admin.firestore();
 
 setGlobalOptions({
   region: "southamerica-east1",
   maxInstances: 10,
 });
 
+// Exportar triggers
 export {onClientCreate} from "./triggers/PsicologoTrigger";
+
+export const dailyBillingJob = onSchedule(
+  {
+    schedule: "0 3 * * *",
+    timeZone: "America/Sao_Paulo",
+  },
+  async () => {
+    await runDailyBilling();
+  }
+);
 
 const app = express();
 app.use(express.json());
