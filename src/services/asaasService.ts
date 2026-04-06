@@ -53,8 +53,8 @@ export class AsaasService {
     return response.data;
   }
 
-  
-    async processarCobrancasDiarias() {
+
+  async processarCobrancasDiarias() {
     const today = new Date();
     const todayDay = today.getDate();
 
@@ -89,7 +89,7 @@ export class AsaasService {
 
         await this.criarCobranca({
           asaasCustomerId: data.asaasCustomerId,
-          valor: data.valorCobranca,
+          valor: 30.00, // valor fixo para teste
           dataVencimento: hojeISO,
           descricao: "Cobrança mensal",
         });
@@ -99,7 +99,6 @@ export class AsaasService {
         });
 
         console.log(`Cobrança criada: ${doc.id}`);
-
       } catch (error) {
         console.error(`Erro ao cobrar ${doc.id}`, error);
       }

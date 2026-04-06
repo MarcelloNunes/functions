@@ -4,7 +4,7 @@ export class Psicologo {
   name: string;
   email: string;
   cpfCnpj: string;
-  telefone: string;
+  whatsapp: string;
   crp: string;
   especialidade: string;
   ativo: boolean;
@@ -15,7 +15,7 @@ export class Psicologo {
     name: string,
     email: string,
     cpfCnpj: string,
-    telefone: string,
+    whatsapp: string,
     crp: string,
     especialidade: string,
     ativo: boolean,
@@ -26,7 +26,7 @@ export class Psicologo {
     this.name = name;
     this.email = email;
     this.cpfCnpj = cpfCnpj;
-    this.telefone = telefone;
+    this.whatsapp = whatsapp;
     this.crp = crp;
     this.especialidade = especialidade;
     this.ativo = ativo;

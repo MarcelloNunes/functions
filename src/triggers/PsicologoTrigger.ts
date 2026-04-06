@@ -28,7 +28,7 @@ export const onClientCreate = onDocumentCreated(
       const payload = {
         nome: data.name,
         email: data.email,
-        telefone: data.telefone,
+        telefone: data.whatsapp,
         cpfCnpj,
       };
 
@@ -47,7 +47,6 @@ export const onClientCreate = onDocumentCreated(
         await psicologoRepository.updateAsaasId(clientId, existing.id);
         return;
       }
-
 
       console.log("📤 Enviando para Asaas:", payload);
 

@@ -12,8 +12,8 @@ import {onRequest} from "firebase-functions/v2/https";
 import express from "express";
 import routes from "./routes/index";
 import * as admin from "firebase-admin";
-import { runDailyBilling } from "./controllers/asaasController";
-import { onSchedule } from "firebase-functions/v2/scheduler";
+import {runDailyBilling} from "./controllers/asaasController";
+import {onSchedule} from "firebase-functions/v2/scheduler";
 
 admin.initializeApp();
 
