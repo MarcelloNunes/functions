@@ -54,9 +54,11 @@ export class AsaasService {
   }
 
   
-  async processarCobrancasDiarias() {
+    async processarCobrancasDiarias() {
     const today = new Date();
     const todayDay = today.getDate();
+
+    const yearMonth = `${today.getFullYear()}-${today.getMonth() + 1}`;
 
     const snapshot = await db.collection("psychologists")
       .where("ativarCobranca", "==", true)
@@ -69,14 +71,21 @@ export class AsaasService {
 
       const billingDay = new Date(data.billingDate).getDate();
 
-      // só cobra no dia certo
-      if (billingDay !== todayDay) continue;
+      const lastDayOfMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() + 1,
+        0
+      ).getDate();
+
+      const effectiveBillingDay = Math.min(billingDay, lastDayOfMonth);
+
+      if (todayDay !== effectiveBillingDay) continue;
 
       try {
-        const hojeISO = today.toISOString().split("T")[0];
+        // evita duplicação no mês
+        if (data.lastBillingMonth === yearMonth) continue;
 
-        // evita duplicação no mesmo dia
-        if (data.lastBillingDate === hojeISO) continue;
+        const hojeISO = today.toISOString().split("T")[0];
 
         await this.criarCobranca({
           asaasCustomerId: data.asaasCustomerId,
@@ -85,9 +94,8 @@ export class AsaasService {
           descricao: "Cobrança mensal",
         });
 
-        // salva controle
         await doc.ref.update({
-          lastBillingDate: hojeISO,
+          lastBillingMonth: yearMonth,
         });
 
         console.log(`Cobrança criada: ${doc.id}`);
