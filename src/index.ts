@@ -29,10 +29,12 @@ export {onClientCreate} from "./triggers/PsicologoTrigger";
 
 export const dailyBillingJob = onSchedule(
   {
+
     schedule: "0 3 * * *",
     timeZone: "America/Sao_Paulo",
   },
   async () => {
+    console.log("JOB EXECUTOU");
     await runDailyBilling();
   }
 );
